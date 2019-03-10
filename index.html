@@ -2,39 +2,106 @@
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
-  <title>MAHMOUD SAYED</title>
-  <meta property="og:image" content="http://mahmoudsayed.me/images/link_preview.jpg" />
+  <title>Mahmoud Sayed</title>
+  <meta property="og:image" content="images/pp-img.jpg" />
+  <link rel='stylesheet' type="text/css" href="css/simple-grid.min.css">
+  <link rel='stylesheet' type="text/css" href="css/kaushan-script-font.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script
+    src="http://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
   <div class="container center">
-    <img src="images/personal-img.jpg" class="personal-img">
-    <h1 class="title">Mahmoud Sayed</h1>
-    <h5 class="bio">J. Rails developer, ICPC World Finalist and CS Student</h5>
-    <h6 class="mail">
-      <a href="mailto:mahmoudsayed0155@gmail.com" class="mail">mahmoudsayed0155@gmail.com</a>
-    </h6>
-    <div class="external-links">
-      <a target="_blank" href="https://www.linkedin.com/in/mahmoudsayed15">
-        <i class="fa fa-linkedin" aria-hidden="true"></i>
-      </a>
-      <a target="_blank" href="https://github.com/M-Sayed">
-        <i class="fa fa-github" aria-hidden="true"></i>
-      </a>
-      <a target="_blank" href="https://www.facebook.com/mahmoudsayed15">
-        <i class="fa fa-facebook" aria-hidden="true"></i>
-      </a>
-      <a target="_blank" href="https://twitter.com/m_sayed15">
-        <i class="fa fa-twitter" aria-hidden="true"></i>
-      </a>
+    <div class="top row">
+      <div class="col-12">
+        <h1 class="name">Mahmoud Sayed</h1>
+        <h2 class="bio">Backend developer at <a href="https://www.iubenda.com">Iubenda</a></h2>
+        <h3 class="mail">
+          <a href="mailto:mahmoudsayed0155@gmail.com" class="mail">mahmoudsayed0155@gmail.com</a>
+        </h3>
+      </div>
     </div>
-    <div class="description">
-      <p>Experienced Software Engineer Skilled in Ruby, Ruby on Rails, AngularJs, Javascript, HTML5, CSS3, C++, Java.</p>
-      <p>Good Knowledge about Algorithms and Data Structures.</p>
-      <p>Studying Bachelor of Engineering (B.E.) at Shoubra Faculty of Engineering - Benha University.</p>
+
+    <div class="content row">
+      <div class="col-6 l-content">
+        <span class="v-center"></span>
+        <img src="images/pp-img.jpg" class="personal-img">
+        <div class="external-links">
+          <a href="https://www.linkedin.com/in/mahmoudsayed15">
+            <i class="fa fa-linkedin" aria-hidden="true"></i>
+          </a>
+          <a href="https://github.com/M-Sayed">
+            <i class="fa fa-github" aria-hidden="true"></i>
+          </a>
+          <a href="https://www.facebook.com/mahmoudsayed15">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+          </a>
+          <a href="https://twitter.com/m_sayed15">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-6 r-content">
+        <ul>
+          <li>
+            <h3>Languages</h3>
+            <ul class="language-ls">
+              <li>Ruby</li>
+              <li>C/C++</li>
+              <li>Javascript</li>
+              <li>CoffeeScript</li>
+              <li>Java</li>
+            </ul>
+          </li>
+          <li>
+            <h3>Frameworks</h3>
+            <ul class="frameworks-ls">
+              <li>Rails</li>
+              <li>Angular</li>
+            </ul>
+          </li>
+          <li>
+            <h3>RDBMs</h3>
+            <ul class="rdbm-ls">
+              <li>MySQL</li>
+              <li>SQL server</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="posts-link internal-link">
+          <a href="/posts">see all posts ⤏</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="bottom row">
+      <p>
+        I'm Software Engineer, work currently as a Backend Developer, I work mainly with Ruby/Rails,
+        I also used to be an ACM contestant, I was an ICPC world finalist in 2017.
+      </p>
+      <p>
+        I have a very bad taste in color, I am sure you know that now.
+      </p>
     </div>
   </div>
+
+  <script>
+    $(document).ready(function() {
+      // make all links open in a new tab unless they are internal paths.
+      $('a').each(function() {
+        console.log($(this).parent().hasClass('internal-link'));
+        if(!$(this).parent().hasClass('internal-link')) {
+          $(this).attr('target', '_blank');
+        }
+      })
+    });
+  </script>
 </body>
 </html>

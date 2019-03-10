@@ -1,45 +1,62 @@
 body {
-  background: url(../images/bg01.jpg) no-repeat;
+  background: url(../images/bg01.jpg);
   background-size: 100%;
   height:100vh;
-  overflow-y: hidden;
 }
 
 .container {
-  background-color: rgba(255, 38, 0, 0.03);
   height: 100%;
   width: 50%;
   margin: 0 auto;
-  padding-top: 5%;
+  padding-top: 2%;
 }
 
-.personal-img {
-  border-radius: 50%;
-  height: 150px;
-  width: 150px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
+.top {}
 
-.center {
-  text-align: center;
-}
-
-.title {
+.name {
   text-transform: uppercase;
-  color: #8bc34a;
+  color: #af3922;
   margin: 2px auto;
+  font-family: 'Kaushan Script';
 }
 
 .bio {
-  color: #cddc39;
+  color: #FFFFAF;
   margin: 0 auto;
-} 
+}
+
+.bio > a {
+  color: #1CC691;
+}
 
 .mail {
   margin: 1px;
-  color: #ffc107;
+  color: #dcbfb9;
+}
+
+.content {
+  height: 440px;
+  min-height: 440px;
+}
+
+.l-content {
+  height: 100%;
+}
+
+.v-center {
+  display: inline-block;
+  height: 25%;
+  vertical-align: middle;
+}
+
+.personal-img {
+  vertical-align: middle;
+  border-radius: 50%;
+  height: 190px;
+  width: 190px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .external-links {
@@ -47,19 +64,60 @@ body {
   margin: 8px;
 }
 
-.external-links a {
+.external-links i {
   color: inherit;
+  text-decoration: none;
+  margin: 2px;
+}
+
+.external-links a {
   text-decoration: none;
    margin: 2px;
 }
 
-.description {
-  width: 90%;
-  margin: 0 auto;
-} 
-
-.description p {
-  margin: 9px 0;
-  font-size: 16px;
-  color: #ff5722;
+.content a {
+  color: white;
 }
+
+.posts-link {
+  font-size: 18px;
+  text-align: left;
+  position: absolute;
+  bottom: 0px;
+}
+
+.posts-link a {
+  color: #dcbfb9;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+ul * {
+  color: #ffc107;
+  text-align: left;
+}
+
+li * {
+  color: #ffc107;
+}
+
+ul h3 {
+  margin-bottom: 0;
+}
+
+.bottom {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.bottom p {
+  font-weight: 500;
+  margin: 9px 0;
+  font-size: 18px;
+  color: #ffbc00;
+}
+
+.top h1 { font-size: 4em; }
+.top h2 { font-size: 2em;  }
