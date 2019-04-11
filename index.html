@@ -8,10 +8,16 @@
   <link rel='stylesheet' type="text/css" href="css/kaushan-script-font.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/loader_styles.css">
   <script src="js/jquery.min.js"></script>
 </head>
 
 <body>
+  <div id="overlay">
+    <div id="progstat"></div>
+    <div id="progress"></div>
+  </div>
+
   <div class="container center">
     <div class="top row">
       <div class="col-12">
@@ -79,16 +85,17 @@
 
     <div class="bottom row">
       <p>
-        I'm Software Engineer, work currently as a Backend Developer, I work mainly with Ruby/Rails,
-        I also used to be an ACM contestant, I was an ICPC world finalist in 2017.
+        I'm Software Engineer. I work currently as a Backend Developer, and mainly work with Ruby/Rails.
+        Before I used to be an ACM contestant, I was an ICPC world finalist in 2017.
       </p>
       <p>
-        I have a very bad taste in color, I am sure you know that now.
+        I have a very bad taste in colors, I am sure you know that now.
       </p>
     </div>
   </div>
 
   <script>
+
     $(document).ready(function() {
       // make all links open in a new tab unless they are internal paths.
       $('a').each(function() {
@@ -98,6 +105,44 @@
         }
       })
     });
+  </script>
+
+  <script>
+    (function(){
+      function loadbar() {
+        var ovrl = document.getElementById("overlay"),
+            prog = document.getElementById("progress"),
+            stat = document.getElementById("progstat"),
+            img  = document.images,
+            c    = 0,
+            tot  = img.length;
+
+        function imgLoaded(){
+          c += 1;
+          var perc = (100 / tot * c) + "%";
+          prog.style.width = perc;
+          stat.innerHTML = "Loading "+ perc;
+
+          if(c === tot)
+            return doneLoading();
+        }
+
+        function doneLoading(){
+          ovrl.style.opacity = 0;
+          setTimeout(function(){
+            ovrl.style.display = "none";
+          }, 1200);
+        }
+
+        for(var i=0; i< tot; i++) {
+          var tImg     = new Image();
+          tImg.onload  = imgLoaded;
+          tImg.onerror = imgLoaded;
+          tImg.src     = img[i].src;
+        }
+      }
+      document.addEventListener('DOMContentLoaded', loadbar, false);
+    }());
   </script>
 </body>
 </html>
