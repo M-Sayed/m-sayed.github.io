@@ -1,0 +1,24 @@
+---
+layout: default
+internal_links: true
+---
+
+<div class="posts-list">
+  {%- if site.posts.size > 0 -%}
+    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+    <h2>Posts </h2>
+    <ul>
+      {% assign sorted_posts = site.posts | sort:"value" | reverse %}
+      {%- for post in sorted_posts -%}
+        <ul>
+          <h2>
+            <span class="post-meta">{{ post.date | date: date_format }}:</span>
+            <a class="post-link" href="{{ post.url | relative_url }}">
+              {{ post.title | escape }}
+            </a>
+          </h2>
+        </ul>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>

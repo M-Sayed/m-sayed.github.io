@@ -1,0 +1,76 @@
+---
+layout: default
+---
+
+<div class="top row">
+  <div class="col-12">
+    <h1 class="name">{{site.data.profile.name}}</h1>
+    <h2 class="bio">{{site.data.profile.occupation.title}} at <a href="{{site.data.profile.occupation.company.url}}">{{site.data.profile.occupation.company.name}}</a></h2>
+    <h3 class="mail">
+      <a href="mailto:mahmoudsayed0155@gmail.com" class="mail">mahmoudsayed0155@gmail.com</a>
+    </h3>
+  </div>
+</div>
+
+<div class="content row">
+  <div class="col-6 l-content">
+    <span class="v-center"></span>
+    <img src="images/pp-img.jpg" class="personal-img">
+    <div class="external-links">
+      <a href="{{site.data.profile.social.linkedin}}">
+        <i class="fa fa-linkedin" aria-hidden="true"></i>
+      </a>
+      <a href="{{site.data.profile.social.github}}">
+        <i class="fa fa-github" aria-hidden="true"></i>
+      </a>
+      <a href="{{site.data.profile.social.facebook}}">
+        <i class="fa fa-facebook" aria-hidden="true"></i>
+      </a>
+      <a href="{{site.data.profile.social.twitter}}">
+        <i class="fa fa-twitter" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-6 r-content">
+    <ul>
+      <li>
+        <h3>Languages</h3>
+        <ul class="language-ls">
+          {% for lang in site.data.skills.languages %}
+            <li>{{lang}}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li>
+        <h3>Frameworks</h3>
+        <ul class="frameworks-ls">
+          {% for framework in site.data.skills.frameworks %}
+            <li>{{framework}}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li>
+        <h3>RDBMs</h3>
+        <ul class="rdbm-ls">
+          {% for rdbm in site.data.skills.rdbms %}
+            <li>{{rdbm}}</li>
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+    <div class="posts-link internal-link">
+      <a href="/posts">see all posts ⤏</a>
+    </div>
+  </div>
+</div>
+
+<div class="bottom row">
+  <p>
+    I'm Software Engineer. I work currently as a Backend Developer, and mainly work with Ruby/Rails.
+    Before I used to be an ACM contestant, I was an ICPC world finalist in 2017.
+  </p>
+  <p>
+    I have a very bad taste in colors, I am sure you know that now.
+  </p>
+</div>

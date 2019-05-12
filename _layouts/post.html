@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+<!-- TODO: style posts -->
+<style>
+  .container { width: 80%; }
+  .reset { all: initial; }
+  .post_book_notes { margin-top: 50px; }
+  .post-title { margin-bottom: 20px; }
+  .post, div {
+    background-color: white;
+    color: black;
+  }
+</style>
+
+<div class="reset">
+  <div class="center post-title"><h1>{{page.title}}<h1></div>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+  {%- if page.book_notes -%}
+    <div class="post_book_notes">
+      The Author of the book are not responsible for the correctness of the above content because I might have misunderstood any part which means that I may have stated it here incorrectly.
+    </div>
+  {%- endif -%}
+</div>
+
+<div class="posts-link internal-link">
+  <a href="{{site.url}}/posts">see all posts ⤏</a>
+</div>

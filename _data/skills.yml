@@ -1,0 +1,12 @@
+languages:
+  - Ruby
+  - C/C++
+  - Javascript
+  - CoffeeScript
+  - Java'
+frameworks:
+  - Rails
+  - Angular
+rdbms:
+  - MySQL
+  - MS SQL Server
