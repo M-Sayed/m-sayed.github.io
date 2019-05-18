@@ -2,66 +2,38 @@
 <html>
   {%- include head.html -%}
   <body>
-    <div id="overlay">
-      <div id="progstat"></div>
-      <div id="progress"></div>
-    </div>
+    {%- include header.html -%}
+    {%- include loader.html -%}
 
-    <div class="container center">
-      {{ content }}
-    </div>
-
-    {% unless page.internal_links %}
-      <script>
-        $(document).ready(function() {
-          // make all links open in a new tab unless they are internal paths.
-          $('a').each(function() {
-            if(!$(this).parent().hasClass('internal-link')) {
-              $(this).attr('target', '_blank');
-            }
-          })
-        });
-      </script>
-    {% endunless %}
+    {{ content }}
 
     <script>
-      (function(){
-        function loadbar() {
-          var ovrl = document.getElementById("overlay"),
-              prog = document.getElementById("progress"),
-              stat = document.getElementById("progstat"),
-              img  = document.images,
-              c    = 0,
-              tot  = img.length;
-
-          function imgLoaded(){
-            c += 1;
-            var perc = (100 / tot * c) + "%";
-            prog.style.width = perc;
-            stat.innerHTML = "Loading "+ perc;
-
-            if(c === tot)
-              return doneLoading();
+      $(document).ready(function() {
+        // make all links open in a new tab unless they are internal paths.
+        $('a').each(function() {
+          if(!$(this).parent().hasClass('internal-link')) {
+            $(this).attr('target', '_blank');
           }
+        })
+      });
+    </script>
 
-          function doneLoading(){
-            ovrl.style.opacity = 0;
-            setTimeout(function(){
-              ovrl.style.display = "none";
-            }, 1200);
+    <script>
+      $(document).ready(function() {
+        var interval = setInterval(function() {
+          if(document.readyState === 'complete') {
+              clearInterval(interval);
+              // alert('done');
+
+              var ovrl = document.getElementById("overlay");
+              ovrl.style.opacity = 0;
+              setTimeout(function(){
+                ovrl.style.display = "none";
+              }, 1200);
+              // done();
           }
-
-          if(tot === 0) return doneLoading();
-
-          for(var i=0; i< tot; i++) {
-            var tImg     = new Image();
-            tImg.onload  = imgLoaded;
-            tImg.onerror = imgLoaded;
-            tImg.src     = img[i].src;
-          }
-        }
-        document.addEventListener('DOMContentLoaded', loadbar, false);
-      }());
+        });
+      });
     </script>
   </body>
 </html>

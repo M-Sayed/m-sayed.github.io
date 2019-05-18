@@ -1,4 +1,4 @@
-*{ margin:0; }
+* { margin: 0; }
 
 #overlay {
   position:fixed;
@@ -11,21 +11,29 @@
   transition: 1s 0.4s;
 }
 
-#progress {
-  height:1px;
-  background:#fff;
-  position:absolute;
-  width:0;
-  top:50%;
+.loader {
+  border: 16px solid #cabbbb;
+  border-radius: 50%;
+  border-top: 16px solid black;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
 }
 
-#progstat {
-  font-size:0.7em;
-  letter-spacing: 3px;
-  position:absolute;
-  top:50%;
-  margin-top:-40px;
-  width:100%;
-  text-align:center;
-  color:#fff;
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.v-center {
+  display: inline-block;
+  height: 35%;
+  vertical-align: middle;
 }
