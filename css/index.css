@@ -25,14 +25,19 @@ p, h2 { color: white; }
 }
 
 .title {
-  color: #FFFFAF;
+  color: #2298af;
   margin: 0 auto;
   margin-top: -10px;
 }
 
+.title a {
+  text-decoration: none;
+  color: #98af22;
+}
+
 .mail {
   margin: 1px;
-  color: #dcbfb9;
+  color: #d88943;
 }
 
 .content {
@@ -67,7 +72,8 @@ p, h2 { color: white; }
 
 .external-links a {
   text-decoration: none;
-   margin: 2px;
+  margin: 2px;
+  font-size: 24px;
 }
 
 .content a {
