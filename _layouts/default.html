@@ -2,16 +2,22 @@
 <html>
   {%- include head.html -%}
   <body>
-    {%- include header.html -%}
+    {%- unless page.hide_header -%}
+      {%- include header.html -%}
+    {%- endunless -%}
     {%- include loader.html -%}
 
-    {{ content }}
+    <div class="container">
+      {{ content }}
+    </div>
 
     <script>
       $(document).ready(function() {
         // make all links open in a new tab unless they are internal paths.
         $('a').each(function() {
-          if(!$(this).parent().hasClass('internal-link')) {
+          console.log($(this).html());
+          console.log($(this).parent().hasClass('internal-link'));
+          if(!$(this).parent().hasClass('internal-link') && !$(this).hasClass('internal-link')) {
             $(this).attr('target', '_blank');
           }
         })
@@ -30,7 +36,6 @@
               setTimeout(function(){
                 ovrl.style.display = "none";
               }, 1200);
-              // done();
           }
         });
       });
