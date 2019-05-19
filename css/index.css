@@ -30,8 +30,10 @@ p, h2 { color: white; }
   margin-top: -10px;
 }
 
-.title a {
+a {
   text-decoration: none;
+}
+.title a {
   color: #98af22;
   white-space: nowrap;
 }
@@ -79,17 +81,6 @@ p, h2 { color: white; }
 
 .content a {
   color: white;
-}
-
-.posts-link {
-  font-size: 18px;
-  text-align: left;
-  position: absolute;
-  bottom: 0px;
-}
-
-.posts-link a {
-  color: #dcbfb9;
 }
 
 ul {

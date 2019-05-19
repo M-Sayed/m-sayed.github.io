@@ -23,9 +23,7 @@ url: "https://m-sayed.github.io" # the base hostname & protocol for your site, e
 
 # Build settings
 markdown: kramdown
-theme: minima
-plugins:
-  - jekyll-feed
+highlighter: rouge
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

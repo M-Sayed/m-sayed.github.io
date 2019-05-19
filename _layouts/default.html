@@ -15,8 +15,6 @@
       $(document).ready(function() {
         // make all links open in a new tab unless they are internal paths.
         $('a').each(function() {
-          console.log($(this).html());
-          console.log($(this).parent().hasClass('internal-link'));
           if(!$(this).parent().hasClass('internal-link') && !$(this).hasClass('internal-link')) {
             $(this).attr('target', '_blank');
           }

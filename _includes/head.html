@@ -11,4 +11,9 @@
   <link rel="stylesheet" type="text/css" href="{{site.url}}/css/loader_styles.css">
   <script src="{{site.url}}/js/jquery.min.js"></script>
   <link rel="shortcut icon" href="/favicons.ico" type="image/x-icon">
+
+  {%- if page.layout == 'post' or page.layout == 'posts' -%}
+  <link rel="stylesheet" type="text/css" href="{{site.url}}/css/posts.css">
+  <link rel="stylesheet" type="text/css" href="{{site.url}}/css/posts-snippet-syntax.css">
+  {%- endif -%}
 </head>

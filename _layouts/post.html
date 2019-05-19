@@ -2,32 +2,34 @@
 layout: default
 ---
 
-<!-- TODO: style posts -->
-<style>
-  .container { width: 80%; }
-  .reset { all: initial; }
-  .post_book_notes { margin-top: 50px; }
-  .post-title { margin-bottom: 20px; }
-  .post, div {
-    background-color: white;
-    color: black;
-  }
-</style>
+{%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 
-<div class="reset">
-  <div class="center post-title"><h1>{{page.title}}<h1></div>
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-8 post">
+    <div class="post-preview">
+      <div class="post-header center">
+        <h2 class="center">{{ page.title | escape }}</h2>
+        <span class="post-date">{{ page.date | date: date_format }}</span>
+      </div>
+      <hr>
+      <div class="post-body">
+        {{ content }}
 
-  <div class="post-content">
-    {{ content }}
-  </div>
+        <h3 class="posts-link internal-link center">
+          <a href="{{site.url}}/posts">Back to Posts</a>
+        </h3>
+      </div>
 
-  {%- if page.book_notes -%}
-    <div class="post_book_notes">
-      The Author of the book are not responsible for the correctness of the above content because I might have misunderstood any part which means that I may have stated it here incorrectly.
+      {%- if page.book_notes -%}
+        <div class="post-note-footage center">
+          <p>
+            The Author(s) of the book ain't responsible for the correctness of the above content
+            because I might have misunderstood any part which means that I may have stated it here
+            incorrectly.
+          </p>
+        </div>
+      {%- endif -%}
     </div>
-  {%- endif -%}
-</div>
-
-<div class="posts-link internal-link">
-  <a href="{{site.url}}/posts">see all posts ⤏</a>
-</div>
+  </div>
+<div>
