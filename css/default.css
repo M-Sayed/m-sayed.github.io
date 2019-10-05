@@ -18,7 +18,7 @@ body {
 
 .content {
   height: 85%;
-  display: flow-root;
+  display: table;
   padding-top: 5px;
 }
 
@@ -53,7 +53,7 @@ aside.bio {
 
   .content {
     height: 85%;
-    display: flow-root;
+    display: table;
     padding-left: 30px;
     padding-top: 5px;
   }
