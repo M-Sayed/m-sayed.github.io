@@ -1,5 +1,6 @@
 name: Mahmoud Sayed
 email: mahmoudsayed0155@gmail.com
+image: pp-img-2.jpg
 
 social:
   linkedin: https://www.linkedin.com/in/mahmoudsayed15
@@ -9,6 +10,6 @@ social:
 
 occupation:
   company:
-    name: ubenda
+    name: iubenda
     url: https://www.iubenda.com
   title: Backend developer

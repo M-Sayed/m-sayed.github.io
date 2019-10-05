@@ -1,90 +1,14 @@
-.post-preview {
-  border: 4px solid #4e4b4b;
-  background: #af392259;
-  border-radius: 15px;
-  margin-top: 45px;
-}
-
-.post > .post-preview {
-  margin-top: 25px;
-}
-
-.post-body {
-  margin-left: 25px;
-}
-
-ul {
-  list-style-type: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-.post-date {
-  font-style: italic;
-  color: #dcbfb9;
-}
-
-.post-brief {
-  margin: 25px 15px 15px 15px;
-  font-size: 20px;
-  color: #ece3c8;
-}
-
-.post-header, h2 > a {
-  color: white;
-}
-
-hr {
-  width: 50%;
-  margin: 10px auto;
-}
-
-.post-note-footage {
-  background: #9a8985;
-  border-bottom-left-radius: 11px;
-  border-bottom-right-radius: 11px;
-  margin-top: 35px;
-}
-
-.post-note-footage > p {
-  margin: auto 10px;
-}
-
-.posts-link a {
-  color: #dcbfb9;
-}
-
-.post-table > table-title {
-
-}
-
-.post-table {
-  margin: 20px auto;
-  width: 80%
-}
-
-.post-table > table {
-  margin: 10px auto;
-  border: 1px solid black;
-}
-
-.post-sub-title {
+.title {
+  color: #791313;
   font-style: italic;
 }
 
-.highlight {
-  width: 60%;
-  margin: auto;
-  border:;
+.body {
+  margin-top: 40px;
 }
 
-.def {
-  margin-bottom: 10px;
+@media only screen and (max-width: 800px) {
+  aside.bio {
+    display: none;
+  }
 }
-
-th { text-align: center }
-.centered-td { text-align:center }
-table, th, td { border: 1px solid black; }
-td { min-width: 50px; }
