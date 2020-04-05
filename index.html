@@ -18,7 +18,12 @@ layout: default
             <div class="post-preview">
               <div class="">
                 <h3 class="post-title">
-                  <a class="internal-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                  <a class="internal-link" href="{{ post.url | relative_url }}">
+                    {%- if post.lang == 'ar' -%}
+                     <span class="ar-post">[Arabic] </span>
+                    {%- endif -%}
+                    {{ post.title | escape }}
+                  </a>
                 </h3>
                 <span class="date">{{ post.date | date: date_format }}</span>
               </div>

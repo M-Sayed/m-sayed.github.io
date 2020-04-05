@@ -152,3 +152,18 @@ hr {
 .more-posts {
   margin-top: 50px;
 }
+
+.share-post {
+  margin-top: 50px;
+  font-size: 30px;
+}
+
+.share-post .fa-linkedin-square {
+  color: #0077b5;
+}
+.share-post .fa-facebook-square {
+  color: blue;
+}
+.ar-post {
+  color: inherit;
+}
