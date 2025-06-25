@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Building Scalable Real-time Analytics with PostgreSQL Citus - Technical blog by Mahmoud Sayed">
+    <title>Building Scalable Real-time Analytics with PostgreSQL Citus - Mahmoud Sayed</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/images/logo-v4.svg" alt="Mahmoud Sayed Logo" width="40" height="40">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#experience" class="nav-link">Experience</a></li>
+                <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <article class="blog-post">
+        <a href="blog.html" class="back-to-blog">← Back to Blog</a>
+        
+        <header class="blog-post-header">
+            <h1 class="blog-post-title">Building Scalable Real-time Analytics with PostgreSQL Citus</h1>
+            <div class="blog-post-meta">
+                Published on December 15, 2024 • 8 min read • System Design
+            </div>
+        </header>
+
+        <div class="blog-post-content">
+            <p>!<a href="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80">Analytics Dashboard</a></p>
+
+<p>When we started building our real-time analytics dashboard at Accredible, we faced a classic challenge: how do you process millions of database records efficiently while maintaining sub-second query performance? The answer lay in PostgreSQL's Citus extension, which transformed our approach to distributed data processing.</p>
+
+<h2>The Challenge</h2>
+
+<p>Our analytics system needed to handle complex aggregations across multiple dimensions:</p>
+
+<ul>
+<li>Time-based analytics (daily, weekly, monthly rollups)</li>
+<li>Geographic distribution of credential issuance</li>
+<li>Institution-specific performance metrics</li>
+<li>Real-time user engagement tracking</li>
+</ul>
+
+<p>Traditional approaches would have required complex data pipeline architectures, but we found a more elegant solution.</p>
+
+<h2>Why PostgreSQL Citus?</h2>
+
+<p>Citus extends PostgreSQL with distributed computing capabilities while maintaining the familiar SQL interface. Here's what made it perfect for our use case:</p>
+
+<blockquote>"Citus allows you to scale PostgreSQL horizontally across multiple machines, turning a cluster of PostgreSQL instances into a single logical database."</blockquote>
+
+<h3>Key Benefits</h3>
+
+<ul>
+<li><strong>Horizontal Scaling</strong>: Distribute data across multiple nodes</li>
+<li><strong>SQL Compatibility</strong>: No need to learn new query languages</li>
+<li><strong>Real-time Ingestion</strong>: Handle high-throughput writes</li>
+<li><strong>Parallel Processing</strong>: Queries execute across all nodes simultaneously</li>
+</ul>
+
+<h2>Architecture Overview</h2>
+
+<p>Our distributed analytics architecture consists of three main components:</p>
+
+<h3>1. Data Ingestion Layer</h3>
+
+<p><pre><code class="language-ruby">class AnalyticsEventProcessor
+  def process_credential_issued(credential)
+    AnalyticsEvent.create!(
+      event_type: &#x27;credential_issued&#x27;,
+      institution_id: credential.institution_id,
+      issued_at: credential.created_at,
+      metadata: {
+        credential_type: credential.template.name,
+        recipient_location: credential.recipient.location,
+        issuer_id: credential.issuer_id
+      }
+    )
+  end
+
+  def process_batch(events)
+    AnalyticsEvent.insert_all(events.map(&amp;:to_hash))
+  end
+end
+</code></pre></p>
+
+<h3>2. Distributed Storage with Citus</h3>
+
+<p>We partition our data by institution_id to ensure related analytics queries hit the same shard:</p>
+
+<p><pre><code class="language-sql">-- Create distributed table
+CREATE TABLE analytics_events (
+    id BIGSERIAL,
+    event_type VARCHAR(50) NOT NULL,
+    institution_id BIGINT NOT NULL,
+    issued_at TIMESTAMP NOT NULL,
+    metadata JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Distribute the table
+SELECT create_distributed_table(&#x27;analytics_events&#x27;, &#x27;institution_id&#x27;);
+
+-- Create time-based index for efficient queries
+CREATE INDEX idx_analytics_events_time 
+ON analytics_events (institution_id, issued_at DESC);
+</code></pre></p>
+
+<h3>3. Rollup Tables for Performance</h3>
+
+<p>To handle complex aggregations efficiently, we maintain pre-computed rollup tables:</p>
+
+<p><pre><code class="language-sql">-- Daily rollups
+CREATE TABLE daily_analytics_rollups (
+    institution_id BIGINT,
+    date DATE,
+    credentials_issued INTEGER,
+    unique_recipients INTEGER,
+    avg_processing_time INTERVAL,
+    top_credential_types JSONB
+);
+
+-- Distributed rollup table
+SELECT create_distributed_table(&#x27;daily_analytics_rollups&#x27;, &#x27;institution_id&#x27;);
+</code></pre></p>
+
+<h2>Real-world Performance Results</h2>
+
+<p>After implementing this architecture, we achieved remarkable performance improvements:</p>
+
+<ul>
+<li><strong>Query Performance</strong>: Average query time reduced from 45 seconds to 0.8 seconds</li>
+<li><strong>Throughput</strong>: Can now handle 50,000+ events per second</li>
+<li><strong>Scalability</strong>: Linear scaling as we add more worker nodes</li>
+<li><strong>Reliability</strong>: Built-in replication and failover capabilities</li>
+</ul>
+
+<h2>Lessons Learned</h2>
+
+<p>1. <strong>Choose Your Distribution Key Wisely</strong> - The distribution key determines how your data is partitioned. We chose <code>institution_id</code> because most queries filter by institution.</p>
+
+<p>2. <strong>Embrace Pre-aggregation</strong> - Rollup tables are essential for complex analytics. Pre-computing during off-peak hours improves dashboard responsiveness.</p>
+
+<p>3. <strong>Monitor Shard Balance</strong> - Regularly check shard distribution to ensure balanced load across worker nodes.</p>
+
+<h2>Conclusion</h2>
+
+<p>PostgreSQL Citus enabled us to build a robust, scalable analytics platform without the complexity of traditional big data solutions. By leveraging familiar SQL interfaces and PostgreSQL's reliability, we created a system that scales with our business while maintaining developer productivity.</p>
+
+<blockquote>"Sometimes the best solutions are the ones that extend what you already know rather than forcing you to learn entirely new paradigms."</blockquote>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Mahmoud Sayed. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
