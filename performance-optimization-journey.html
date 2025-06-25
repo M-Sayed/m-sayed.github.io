@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="From Minutes to Milliseconds - A Performance Optimization Journey - Technical blog by Mahmoud Sayed">
+    <title>From Minutes to Milliseconds - A Performance Optimization Journey - Mahmoud Sayed</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/images/logo-v4.svg" alt="Mahmoud Sayed Logo" width="40" height="40">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#experience" class="nav-link">Experience</a></li>
+                <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <article class="blog-post">
+        <a href="blog.html" class="back-to-blog">← Back to Blog</a>
+        
+        <header class="blog-post-header">
+            <h1 class="blog-post-title">From Minutes to Milliseconds - A Performance Optimization Journey</h1>
+            <div class="blog-post-meta">
+                Published on November 28, 2024 • 12 min read • Performance
+            </div>
+        </header>
+
+        <div class="blog-post-content">
+            <p>!<a href="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80">Performance Monitoring</a></p>
+
+<p>There's nothing quite like the feeling of transforming a painfully slow query from taking minutes to executing in milliseconds. During my time at Iubenda, I embarked on a performance optimization journey that resulted in 10x faster page load times and 4x improvement in response times. Here's the story of how we achieved these dramatic improvements.</p>
+
+<h2>The Starting Point: A Performance Nightmare</h2>
+
+<p>When I joined the team, users were experiencing page load times of 30+ seconds for complex help post searches. The application would sometimes timeout, and the database was constantly under heavy load. Something had to be done.</p>
+
+<blockquote>"Performance is not just about speed—it's about user experience, business value, and system reliability."</blockquote>
+
+<h3>Initial Metrics</h3>
+
+<ul>
+<li>Average page load time: 32 seconds</li>
+<li>Help post search response: 18 seconds</li>
+<li>Database CPU utilization: 85%</li>
+<li>Cache hit ratio: 12%</li>
+</ul>
+
+<h2>Step 1: Profiling and Identifying Bottlenecks</h2>
+
+<p>The first rule of optimization: measure everything. I started by implementing comprehensive profiling across the application stack.</p>
+
+<h3>Rails Profiling Setup</h3>
+
+<p><pre><code class="language-ruby">class ApplicationController &lt; ActionController::Base
+  before_action :start_profiling
+  after_action :log_performance_metrics
+
+  private
+
+  def start_profiling
+    @start_time = Time.current
+    @start_memory = get_memory_usage
+  end
+
+  def log_performance_metrics
+    duration = Time.current - @start_time
+    memory_used = get_memory_usage - @start_memory
+    
+    Rails.logger.info({
+      controller: controller_name,
+      action: action_name,
+      duration: duration,
+      memory_delta: memory_used,
+      sql_queries: sql_query_count
+    }.to_json)
+  end
+end
+</code></pre></p>
+
+<h3>Database Query Analysis</h3>
+
+<p>The real culprit was in our database queries. The original problematic query was using ILIKE operators without proper indexing:</p>
+
+<p><pre><code class="language-sql">-- Original query taking 18+ seconds
+SELECT h.*, u.name as author_name, c.name as category_name
+FROM help_posts h
+LEFT JOIN users u ON h.user_id = u.id
+LEFT JOIN categories c ON h.category_id = c.id
+WHERE h.content ILIKE &#x27;%search_term%&#x27;
+   OR h.title ILIKE &#x27;%search_term%&#x27;
+ORDER BY h.created_at DESC
+LIMIT 20;
+</code></pre></p>
+
+<h2>Step 2: Database Optimization</h2>
+
+<h3>Strategic Indexing</h3>
+
+<p>The first major improvement came from intelligent indexing:</p>
+
+<p><pre><code class="language-sql">-- Full-text search indexes
+CREATE INDEX idx_help_posts_fulltext ON help_posts 
+USING gin(to_tsvector(&#x27;english&#x27;, title || &#x27; &#x27; || content));
+
+-- Composite indexes for common filter combinations
+CREATE INDEX idx_help_posts_category_date ON help_posts 
+(category_id, created_at DESC) WHERE status = &#x27;published&#x27;;
+
+-- Partial index for active posts only
+CREATE INDEX idx_help_posts_active ON help_posts (created_at DESC) 
+WHERE status = &#x27;published&#x27; AND deleted_at IS NULL;
+</code></pre></p>
+
+<h3>Query Rewriting</h3>
+
+<p>The original query was rewritten to leverage PostgreSQL's full-text search:</p>
+
+<p><pre><code class="language-sql">-- Optimized query using full-text search
+WITH search_results AS (
+  SELECT h.*, 
+         ts_rank(to_tsvector(&#x27;english&#x27;, h.title || &#x27; &#x27; || h.content), 
+                 plainto_tsquery(&#x27;english&#x27;, $1)) as rank
+  FROM help_posts h
+  WHERE h.status = &#x27;published&#x27; 
+    AND to_tsvector(&#x27;english&#x27;, h.title || &#x27; &#x27; || h.content) 
+        @@ plainto_tsquery(&#x27;english&#x27;, $1)
+)
+SELECT sr.*, u.name as author_name, c.name as category_name
+FROM search_results sr
+JOIN users u ON sr.user_id = u.id
+JOIN categories c ON sr.category_id = c.id
+ORDER BY sr.rank DESC, sr.created_at DESC
+LIMIT 20;
+
+-- Query execution time: 45ms (down from 18 seconds!)
+</code></pre></p>
+
+<h2>Step 3: Strategic Caching Implementation</h2>
+
+<p>With database queries optimized, the next focus was intelligent caching:</p>
+
+<h3>Fragment Caching with Smart Invalidation</h3>
+
+<p><pre><code class="language-ruby">class HelpPost &lt; ApplicationRecord
+  after_save :expire_related_caches
+  after_destroy :expire_related_caches
+
+  def cache_key_with_version
+    &quot;#{cache_key}/#{cache_version}&quot;
+  end
+
+  private
+
+  def expire_related_caches
+    Rails.cache.delete_matched(&quot;help_posts/search/*&quot;)
+    Rails.cache.delete_matched(&quot;help_posts/category/#{category_id}/*&quot;)
+  end
+end
+</code></pre></p>
+
+<h2>Step 4: Application-Level Optimizations</h2>
+
+<h3>N+1 Query Elimination</h3>
+
+<p><pre><code class="language-ruby"># Before: N+1 queries
+def show_help_posts
+  @help_posts = HelpPost.published.limit(10)
+  # This will trigger N queries for users and N queries for categories
+end
+
+# After: Proper eager loading
+def show_help_posts
+  @help_posts = HelpPost.published
+                        .includes(:user, :category, :tags)
+                        .limit(10)
+end
+</code></pre></p>
+
+<h2>The Results: Dramatic Performance Gains</h2>
+
+<p>After implementing all optimizations, the results were remarkable:</p>
+
+<h3>Before vs After Metrics</h3>
+
+<ul>
+<li>Page Load Time: 32s → 3.2s (10x faster)</li>
+<li>Search Response: 18s → 4.5s (4x faster)</li>
+<li>DB CPU Usage: 85% → 35% (59% reduction)</li>
+<li>Cache Hit Ratio: 12% → 87% (7x improvement)</li>
+</ul>
+
+<h2>Key Lessons Learned</h2>
+
+<p>1. <strong>Measure First, Optimize Second</strong> - Without proper profiling, you're optimizing blind.</p>
+
+<p>2. <strong>Database Optimization Has the Biggest Impact</strong> - In most web applications, the database is the bottleneck.</p>
+
+<p>3. <strong>Caching is an Art, Not a Science</strong> - Effective caching requires understanding your application's access patterns.</p>
+
+<p>4. <strong>Monitor Everything</strong> - Performance optimization is an ongoing process.</p>
+
+<blockquote>"The fastest code is the code that never runs. The second fastest is the code that runs efficiently."</blockquote>
+
+<h2>Conclusion</h2>
+
+<p>Performance optimization is a journey, not a destination. By following a systematic approach—profiling, database optimization, strategic caching, and continuous monitoring—we transformed a slow, frustrating user experience into a fast, responsive application.</p>
+
+<p>Remember: every millisecond matters to your users. The effort you put into performance optimization directly translates to better user experience and business value.</p>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Mahmoud Sayed. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

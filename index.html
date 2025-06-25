@@ -1,40 +1,337 @@
----
-layout: default
----
-
-<div class="row">
-  <h2>Posts</h2>
-</div>
-
-{%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-
-<div class="row">
-  <div class="col-12 posts">
-    {%- if site.posts.size > 0 -%}
-      <ul>
-        {% assign sorted_posts = site.posts | sort:"value" | reverse %}
-        {%- for post in sorted_posts -%}
-          <li>
-            <div class="post-preview">
-              <div class="">
-                <h3 class="post-title">
-                  <a class="internal-link" href="{{ post.url | relative_url }}">
-                    {%- if post.lang == 'ar' -%}
-                     <span class="ar-post">[Arabic] </span>
-                    {%- endif -%}
-                    {{ post.title | escape }}
-                  </a>
-                </h3>
-                <span class="date">{{ post.date | date: date_format }}</span>
-              </div>
-              <div class="post-brief">
-                {{post.brief}}
-              </div>
-              <hr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mahmoud Sayed - Senior Software Engineer with 8+ years experience in backend development, system architecture, and DevOps">
+    <meta name="keywords" content="Software Engineer, Backend Developer, Ruby on Rails, TypeScript, AWS, DevOps">
+    <meta name="author" content="Mahmoud Sayed">
+    <title>Mahmoud Sayed - Senior Software Engineer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/images/logo-v4.svg" alt="Mahmoud Sayed Logo" width="40" height="40">
+                </a>
             </div>
-          </li>
-        {%- endfor -%}
-      </ul>
-    {%- endif -%}
-  </div>
-</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Mahmoud Sayed</h1>
+                <h2 class="hero-subtitle">Senior Software Engineer</h2>
+                <p class="hero-description">
+                    8+ years crafting scalable backend systems, optimizing performance, and leading technical initiatives
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Get In Touch</a>
+                    <a href="#experience" class="btn btn-secondary">View Work</a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/mahmoudsayed15" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    <a href="http://github.com/m-Sayed" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a Senior Software Engineer with over 8 years of experience building robust backend systems 
+                        and leading technical initiatives. Currently at Accredible, I architect scalable solutions 
+                        processing millions of records and drive infrastructure modernization.
+                    </p>
+                    <p>
+                        My journey began with competitive programming, where I qualified for the ICPC World Finals 
+                        and won multiple regional championships. This foundation in algorithms and problem-solving 
+                        continues to drive my approach to engineering challenges.
+                    </p>
+                    <p>
+                        I specialize in performance optimization, distributed systems, and DevOps practices. 
+                        From reducing page load times by 10x to architecting real-time analytics dashboards, 
+                        I'm passionate about creating efficient, scalable solutions.
+                    </p>
+                </div>
+                <div class="about-highlights">
+                    <div class="highlight-card">
+                        <h3>8+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="highlight-card">
+                        <h3>10x</h3>
+                        <p>Performance Gains</p>
+                    </div>
+                    <div class="highlight-card">
+                        <h3>ICPC</h3>
+                        <p>World Finals Qualifier</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Dec 2020 - Present</div>
+                    <div class="timeline-content">
+                        <h3>Senior Software Engineer</h3>
+                        <h4>Accredible</h4>
+                        <ul>
+                            <li>Architected real-time analytics dashboard with distributed PostgreSQL (Citus) processing millions of records</li>
+                            <li>Led development of "Transcripts" feature for secure generation and sharing of verified academic transcripts</li>
+                            <li>Spearheaded migration from AWS Elastic Beanstalk to ECS and analytics infrastructure to separate AWS account</li>
+                            <li>Established comprehensive observability using Grafana Alloy, Tempo, Prometheus, and OpenTelemetry across polyglot services</li>
+                            <li>Designed sophisticated billing credit distribution system and built foundational Kafka consumers</li>
+                            <li>Created first modular component leading architectural evolution toward modular-monolith patterns</li>
+                            <li>Optimized search endpoints with Elasticsearch and developed standardized LTI 1.3 integration framework</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">June 2021 - April 2022</div>
+                    <div class="timeline-content">
+                        <h3>Senior Software Engineer (Freelance)</h3>
+                        <h4>Toptal</h4>
+                        <ul>
+                            <li>Delivered full-stack features for Zeus Living and Corsair Gaming through Toptal's exclusive network</li>
+                            <li>Enhanced GraphQL APIs and improved authentication systems using omniauth</li>
+                            <li>Integrated ClickUp for enhanced task management workflows</li>
+                            <li>Optimized endpoint performance and significantly increased test coverage</li>
+                            <li>Resolved critical user experience bugs and improved overall application stability</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan 2019 - Nov 2020</div>
+                    <div class="timeline-content">
+                        <h3>Software Engineer</h3>
+                        <h4>Iubenda</h4>
+                        <ul>
+                            <li>Achieved 10x page load time reduction through SQL query optimization and strategic caching</li>
+                            <li>Improved help post response times by 4x using full-text search and indexing strategies</li>
+                            <li>Designed and implemented robust licensing system with multi-user access controls</li>
+                            <li>Integrated major payment gateways including PayPal and Braintree</li>
+                            <li>Automated cache purging processes for fragment cache keys</li>
+                            <li>Refactored and optimized multiple backend modules for better maintainability</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Dec 2017 - Dec 2018</div>
+                    <div class="timeline-content">
+                        <h3>Software Engineer</h3>
+                        <h4>National Company for Roads</h4>
+                        <ul>
+                            <li>Developed critical infrastructure systems for national tolling operations</li>
+                            <li>Designed and maintained databases ensuring data integrity for critical infrastructure</li>
+                            <li>Built desktop and web applications supporting core tolling operations</li>
+                            <li>Managed database replication systems for high availability</li>
+                            <li>Collaborated on government-level infrastructure projects</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Sep 2016 - Oct 2017</div>
+                    <div class="timeline-content">
+                        <h3>Software Engineer</h3>
+                        <h4>Lifeblink</h4>
+                        <ul>
+                            <li>Improved database read performance through query optimization, index redesigning, and table restructuring</li>
+                            <li>Implemented caching mechanisms achieving 6x faster page load speeds</li>
+                            <li>Enhanced user experience with asynchronous pagination and infinite scrolling via AJAX</li>
+                            <li>Built the "Life Group" feature from ground up, adding key functionality</li>
+                            <li>Integrated payment processing using ActiveMerchant and PayPal</li>
+                            <li>Resolved multiple design and logic issues improving system stability</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Oct 2015 - Aug 2016</div>
+                    <div class="timeline-content">
+                        <h3>Software Developer Intern</h3>
+                        <h4>eTurn - Appenza Studio</h4>
+                        <ul>
+                            <li>Handled bug fixing and feature development for Rails/AngularJS Learning Management System</li>
+                            <li>Integrated admin panel system into LMS application</li>
+                            <li>Gained foundational experience in full-stack web development</li>
+                            <li>Collaborated with senior developers on complex application features</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Languages & Frameworks</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Ruby on Rails</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Go</span>
+                        <span class="skill-tag">Elixir</span>
+                        <span class="skill-tag">Vue.js</span>
+                        <span class="skill-tag">Next.js</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Databases & Data</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Redis</span>
+                        <span class="skill-tag">ElasticSearch</span>
+                        <span class="skill-tag">Kafka</span>
+                        <span class="skill-tag">Citus</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Cloud & DevOps</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Terraform</span>
+                        <span class="skill-tag">GitHub Actions</span>
+                        <span class="skill-tag">CircleCI</span>
+                        <span class="skill-tag">ECS</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Observability</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">OpenTelemetry</span>
+                        <span class="skill-tag">Prometheus</span>
+                        <span class="skill-tag">Grafana</span>
+                        <span class="skill-tag">NewRelic</span>
+                        <span class="skill-tag">Tempo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Projects & Achievements</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Real-time Analytics Dashboard</h3>
+                    <p>Architected scalable analytics system processing millions of records using PostgreSQL Citus, enabling real-time insights for stakeholders.</p>
+                    <div class="project-tech">
+                        <span>PostgreSQL</span>
+                        <span>Citus</span>
+                        <span>Real-time Processing</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Academic Transcripts Platform</h3>
+                    <p>Led development of secure transcript generation and sharing system serving universities, employers, and educational institutions.</p>
+                    <div class="project-tech">
+                        <span>Ruby on Rails</span>
+                        <span>Security</span>
+                        <span>API Design</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>ECare Mobile Application</h3>
+                    <p>Developed healthcare app for chronic disease management with automated notifications and real-time caregiver tracking.</p>
+                    <div class="project-tech">
+                        <span>Mobile Development</span>
+                        <span>Real-time Tracking</span>
+                        <span>Healthcare</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Competitive Programming</h3>
+                    <p>ICPC World Finals Qualifier, Bronze Medal at ACM ACPC, Multiple championship wins demonstrating algorithmic excellence.</p>
+                    <div class="project-tech">
+                        <span>Algorithms</span>
+                        <span>Data Structures</span>
+                        <span>Problem Solving</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <p>I'm always interested in discussing new opportunities, technical challenges, or potential collaborations.</p>
+                <div class="contact-links">
+                    <a href="mailto:mahmoudsayed0155@gmail.com" class="contact-link">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        Email
+                    </a>
+                    <a href="https://www.linkedin.com/in/mahmoudsayed15" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <a href="http://github.com/m-Sayed" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Mahmoud Sayed. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

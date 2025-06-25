@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load balancer VS Reverse Proxy - Mahmoud Sayed</title>
+  <meta name="description" content="What is a load balancer? What's a reverse proxy? And what are the differences between both of them?">
+  
+  <link rel="stylesheet" href="/css/cv.css">
+  <link rel="stylesheet" href="/css/blog.css">
+  <link rel="stylesheet" href="/css/monokai.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="/favicons.ico">
+  
+  <meta property="og:title" content="Load balancer VS Reverse Proxy">
+  <meta property="og:description" content="What is a load balancer? What's a reverse proxy? And what are the differences between both of them?">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://m-sayed.github.io/2019/12/29/load-balancer-vs-reverse-proxy.html">
+  <meta property="article:published_time" content="2019-12-29T00:00:00+02:00">
+  <meta property="article:author" content="Mahmoud Sayed">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">MS</a>
+      <ul class="nav-menu">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/#about" class="nav-link">About</a></li>
+        <li><a href="/#experience" class="nav-link">Experience</a></li>
+        <li><a href="/#skills" class="nav-link">Skills</a></li>
+        <li><a href="/blog" class="nav-link">Blog</a></li>
+        <li><a href="/#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <article class="post-container">
+      <header class="post-header-single">
+        <h1 class="post-title-single">Load balancer VS Reverse Proxy
+        </h1>
+        <div class="post-meta">
+          <time>December 29, 2019</time>
+        </div>
+      </header>
+
+      <div class="post-content">
+        <p>It happens a lot when these two terms come in front of me, and mostly, I say “Oh, no. I forgot again the difference between both of them!”, so here I’m writing what I understand, so it can always be my only reference, and yours definitely if you found it useful. ;)</p>
+
+<hr />
+
+<h2 id="load-balancer">Load Balancer</h2>
+
+<p>Let’s imagine you have that application that is becoming too popular, and in a day you get millions of requests headed to your application’s server, you notice that over time your server is responding with higher latency and a small throughput compared with that large number of requests, that’s definitely going to drive users away from using your app.</p>
+
+<p>Now, you realized that your application can not serve that huge number of requests and you decided to <a href="https://en.wikipedia.org/wiki/Scalability#Horizontal">scale it horizontally</a>, by having multiple servers, but now you have questions, don’t you?</p>
+
+<ol>
+  <li>How are the clients supposed to communicate with these servers?</li>
+  <li>How will the load be <strong>distributed/balanced</strong> between these servers?</li>
+</ol>
+
+<p>And here when a Load balancer intervenes to solve the problem - what a super hero. You can simply imagine a load balancer to be an intermediary piece of software - <a href="https://en.wikipedia.org/wiki/Load_balancing_(computing)">or hardware</a> - that sits between your clients and your servers, the clients will not be communicating directly with your servers any more, instead, they will communicate with your load balancer.</p>
+
+<p>When a client sends a request, the load balancer sends that request to one of your servers, you wonder, which server? I got many, right? The chosen server is determined by which algorithm you’re using, and some of these algorithms are:</p>
+<ol>
+  <li>Random</li>
+  <li>Round Robin / weighted Round Robin</li>
+  <li>Least connections / weighted least connections</li>
+</ol>
+
+<p>After we knew what a load balancer really does, let’s write down some of its pros &amp; cons:</p>
+
+<h3 id="advantages">Advantages:</h3>
+<ol>
+  <li>Your server is no more considered a single point of failure, you got multiple servers running at the same time.</li>
+  <li>It will detect if any of the servers is down and divert the requests away from that server, so your clients get more successful responses.</li>
+  <li>It could be so helpful if your application requires <a href="https://www.nginx.com/resources/glossary/session-persistence">session persistence</a>.</li>
+</ol>
+
+<h3 id="disadvantages">Disadvantages:</h3>
+<ol>
+  <li>Increased complexity</li>
+  <li>One load balancer is considered a single point of failure</li>
+</ol>
+
+<hr />
+
+<h2 id="reverse-proxy">Reverse Proxy</h2>
+
+<p>Load balancers seem to be really easier to understand, their name (i.e., load balancer) is so descriptive and tells what they mostly do, right? Then, what are reverse proxies? and why they confuse me?</p>
+
+<p>Reverse Proxy is also an intermediary between your server(s) and your clients, but on the other hand, using them doesn’t necessarily come with having multiple servers, you can set up a reverse proxy even if you have only one server, a reverse proxy is more like your application’s “public face”, It allows you to expose your reverse proxy’s info to your clients instead of your servers’ info, for example, you can expose the reverse proxy’s IP address instead of your servers’ and that will increase security and protect your servers from malicious clients and DDoS attacks.</p>
+
+<p>Simply, A reverse proxy receives requests from the clients and send them to your servers, and receives responses from your server(s) and send them back to your clients.</p>
+
+<h3 id="advantages-1">Advantages</h3>
+<ol>
+  <li>It increases security
+    <ol>
+      <li>can be used to protect the server from DDoS attacks</li>
+    </ol>
+  </li>
+  <li>can be used for web acceleration - reducing the time it takes to generate a response and return it to the client - techniques:
+    <ol>
+      <li>SSL termination</li>
+      <li>Caching</li>
+      <li>Compression</li>
+    </ol>
+  </li>
+  <li>It can act as a load balancer</li>
+</ol>
+
+<h3 id="disadvantages-1">Disadvantages</h3>
+<ol>
+  <li>It increases complexity</li>
+  <li>One reverse proxy is a single point of failure.</li>
+</ol>
+
+<h4 id="refs">Refs:</h4>
+<p>there are plenty of great references out there, so glad we have <a href="https://youtu.be/iDbyYGrswtg">the Internet</a>.</p>
+
+<ol>
+  <li><a href="https://www.nginx.com/resources/glossary/reverse-proxy-vs-load-balancer/">https://www.nginx.com/resources/glossary/reverse-proxy-vs-load-balancer/</a></li>
+  <li><a href="https://serverfault.com/a/127022">https://serverfault.com/a/127022</a></li>
+  <li><a href="https://stackoverflow.com/a/28829633/4643970">https://stackoverflow.com/a/28829633/4643970</a></li>
+  <li><a href="https://youtu.be/S8J2fkN2FeI">https://youtu.be/S8J2fkN2FeI</a></li>
+  <li><a href="https://github.com/donnemartin/system-design-primer#reverse-proxy-web-server">https://github.com/donnemartin/system-design-primer#reverse-proxy-web-server</a></li>
+  <li><a href="https://github.com/donnemartin/system-design-primer#load-balancer">https://github.com/donnemartin/system-design-primer#load-balancer</a></li>
+  <li><a href="https://www.jscape.com/blog/load-balancing-algorithms">https://www.jscape.com/blog/load-balancing-algorithms</a></li>
+  <li><a href="https://www.nginx.com/resources/glossary/session-persistence">https://www.nginx.com/resources/glossary/session-persistence</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Scalability#Horizontal">https://en.wikipedia.org/wiki/Scalability#Horizontal</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Load_balancing_(computing)">https://en.wikipedia.org/wiki/Load_balancing_(computing)</a></li>
+</ol>
+
+      </div>
+
+      <div class="share-post"><a class="twitter-share-button fa fa-twitter"
+           href="https://twitter.com/intent/tweet?text=Load balancer VS Reverse Proxy&url=https://m-sayed.github.io/2019/12/29/load-balancer-vs-reverse-proxy.html&via=m_sayed15"
+           target="_blank">
+        </a>
+
+        <a class="facebook-share-button fa fa-facebook"
+           href="https://facebook.com/sharer/sharer.php?u=https://m-sayed.github.io/2019/12/29/load-balancer-vs-reverse-proxy.html&quote=Load balancer VS Reverse Proxy"
+           target="_blank">
+        </a>
+      </div>
+
+      <nav class="post-navigation">
+        
+        <a href="/blog" class="post-nav-link">
+          All Posts
+        </a>
+        
+          <a href="/ar/2020/04/04/ocp-in-arabic.html" class="post-nav-link">
+            Next Post
+            <i class="fa fa-arrow-right"></i>
+          </a>
+        
+      </nav>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Mahmoud Sayed. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // Navbar background
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

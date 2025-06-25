@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html><head>
+  <title>Mahmoud Sayed</title><meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@m_sayed15" />
+<meta name="twitter:title" content="" />
+<meta name="twitter:description" content="Mahmoud Sayed | Personal Website" />
+<meta name="twitter:image" content="https://m-sayed.github.io/images/pp-img-2.jpg" />
+
+<meta property="og:url" content="https://m-sayed.github.io" />
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="" />
+<meta property="og:description" content="Mahmoud Sayed | Personal Website" />
+<meta property="og:image" content="https://m-sayed.github.io/images/pp-img-2.jpg" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="title" content="" />
+<meta name="description" content="Software Engineer, who's interested in highly scalable and maintainable applications."
+/>
+<meta name="keywords" content="mahmoud, sayed, mahmoud sayed, software engineer">
+<meta name="robots" content="index,follow">
+<link rel='stylesheet' type="text/css" href="https://m-sayed.github.io/css/simple-grid.min.css">
+  <link rel="stylesheet" type="text/css" href="https://m-sayed.github.io/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.css">
+  <link rel='stylesheet' type="text/css" href="https://m-sayed.github.io/css/kaushan-script-font.css">
+  <link rel="stylesheet" type="text/css" href="https://m-sayed.github.io/css/loader_styles.css">
+  <link rel="shortcut icon" href="/favicons.ico" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="https://m-sayed.github.io/css/default.css">
+
+  <script src="https://m-sayed.github.io/js/jquery.min.js"></script></head>
+<body><div id="overlay">
+  <span class="v-center"></span>
+  <div class="loader center">
+  </div>
+</div>
+<div class="header_bar">
+
+</div>
+<div class="container"><aside class="bio">
+  <div class="">
+    <section class="bs1 center">
+      <div class="">
+        <img src="https://m-sayed.github.io/images/pp-img-2.jpg" class="personal-img">
+      </div>
+
+      <div class="name">
+        <h2>Mahmoud Sayed</h2>
+      </div>
+
+      <div class="title">
+        <h5>
+          Senior Software Engineer at
+          <a href="https://www.accredible.com">Accredible</a>
+        </h5>
+      </div>
+
+      <div class="social-links center">
+        <a href="https://www.linkedin.com/in/mahmoudsayed15">
+          <i class="fa fa-linkedin" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.github.com/m-sayed">
+          <i class="fa fa-github" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.facebook.com/mahmoudsayed15">
+          <i class="fa fa-facebook" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.twitter.com/m_sayed15">
+          <i class="fa fa-twitter" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+
+    <section class="bs2">
+      <div class="about">
+        <p>
+          I'm a Software Engineer, who's interested in web development and working on highly scalable and maintainable applications, worked with multiple web technologies, like Rails and Laravel, and with multiple programming languages, like C++, Ruby, Java, PHP and JS.
+        </p>
+
+        <p>
+          I used to participate in multiple contests and competitions such as Facebook Hackercup, Google Codejam, IEEEXtreme and ACM ICPC competitions. I got bronze medal in the regional ACM ACPC competition and qualified to ACM ICPC 2017.
+        </p>
+      </div>
+    </section>
+
+    <section class="contact"><h4>Contact:</h4>
+<div><p>Feel free to email me:</p></div>
+<a href="mailto:mahmoudsayed0155@gmail.com" class="internal-link">mahmoudsayed0155@gmail.com</a>
+</section>
+  </div>
+</aside>
+<div class="content">
+        
+
+
+        <div class="contact-bottom"><h4>Contact:</h4>
+<div><p>Feel free to email me:</p></div>
+<a href="mailto:mahmoudsayed0155@gmail.com" class="internal-link">mahmoudsayed0155@gmail.com</a>
+</div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function() {
+        // make all links open in a new tab unless when they are internal paths.
+        $('a').each(function() {
+          if(!$(this).parent().hasClass('internal-link') && !$(this).hasClass('internal-link')) {
+            $(this).attr('target', '_blank');
+          }
+        })
+      });
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        var interval = setInterval(function() {
+          if(document.readyState === 'complete') {
+            clearInterval(interval);
+
+            var ovrl = document.getElementById("overlay");
+            ovrl.style.opacity = 0;
+            setTimeout(function(){
+              ovrl.style.display = "none";
+            }, 1200);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

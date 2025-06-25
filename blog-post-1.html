@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Building Scalable Real-time Analytics with PostgreSQL Citus - Technical blog by Mahmoud Sayed">
+    <title>Building Scalable Real-time Analytics with PostgreSQL Citus - Mahmoud Sayed</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">MS</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#experience" class="nav-link">Experience</a></li>
+                <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <article class="blog-post">
+        <a href="blog.html" class="back-to-blog">← Back to Blog</a>
+        
+        <header class="blog-post-header">
+            <h1 class="blog-post-title">Building Scalable Real-time Analytics with PostgreSQL Citus</h1>
+            <div class="blog-post-meta">
+                Published on December 15, 2024 • 8 min read • System Design
+            </div>
+        </header>
+
+        <div class="blog-post-content">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Analytics Dashboard">
+
+            <p>When we started building our real-time analytics dashboard at Accredible, we faced a classic challenge: how do you process millions of database records efficiently while maintaining sub-second query performance? The answer lay in PostgreSQL's Citus extension, which transformed our approach to distributed data processing.</p>
+
+            <h2>The Challenge</h2>
+
+            <p>Our analytics system needed to handle complex aggregations across multiple dimensions:</p>
+
+            <ul>
+                <li>Time-based analytics (daily, weekly, monthly rollups)</li>
+                <li>Geographic distribution of credential issuance</li>
+                <li>Institution-specific performance metrics</li>
+                <li>Real-time user engagement tracking</li>
+            </ul>
+
+            <p>Traditional approaches would have required complex data pipeline architectures, but we found a more elegant solution.</p>
+
+            <h2>Why PostgreSQL Citus?</h2>
+
+            <p>Citus extends PostgreSQL with distributed computing capabilities while maintaining the familiar SQL interface. Here's what made it perfect for our use case:</p>
+
+            <blockquote>
+                "Citus allows you to scale PostgreSQL horizontally across multiple machines, turning a cluster of PostgreSQL instances into a single logical database."
+            </blockquote>
+
+            <h3>Key Benefits</h3>
+
+            <ul>
+                <li><strong>Horizontal Scaling</strong>: Distribute data across multiple nodes</li>
+                <li><strong>SQL Compatibility</strong>: No need to learn new query languages</li>
+                <li><strong>Real-time Ingestion</strong>: Handle high-throughput writes</li>
+                <li><strong>Parallel Processing</strong>: Queries execute across all nodes simultaneously</li>
+            </ul>
+
+            <h2>Architecture Overview</h2>
+
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="System Architecture Diagram">
+
+            <p>Our distributed analytics architecture consists of three main components:</p>
+
+            <h3>1. Data Ingestion Layer</h3>
+
+            <pre><code class="language-ruby">class AnalyticsEventProcessor
+  def process_credential_issued(credential)
+    AnalyticsEvent.create!(
+      event_type: 'credential_issued',
+      institution_id: credential.institution_id,
+      issued_at: credential.created_at,
+      metadata: {
+        credential_type: credential.template.name,
+        recipient_location: credential.recipient.location,
+        issuer_id: credential.issuer_id
+      }
+    )
+  end
+
+  def process_batch(events)
+    AnalyticsEvent.insert_all(events.map(&:to_hash))
+  end
+end</code></pre>
+
+            <h3>2. Distributed Storage with Citus</h3>
+
+            <p>We partition our data by institution_id to ensure related analytics queries hit the same shard:</p>
+
+            <pre><code class="language-sql">-- Create distributed table
+CREATE TABLE analytics_events (
+    id BIGSERIAL,
+    event_type VARCHAR(50) NOT NULL,
+    institution_id BIGINT NOT NULL,
+    issued_at TIMESTAMP NOT NULL,
+    metadata JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Distribute the table
+SELECT create_distributed_table('analytics_events', 'institution_id');
+
+-- Create time-based index for efficient queries
+CREATE INDEX idx_analytics_events_time 
+ON analytics_events (institution_id, issued_at DESC);
+</code></pre>
+
+            <h3>3. Rollup Tables for Performance</h3>
+
+            <p>To handle complex aggregations efficiently, we maintain pre-computed rollup tables:</p>
+
+            <pre><code class="language-sql">-- Daily rollups
+CREATE TABLE daily_analytics_rollups (
+    institution_id BIGINT,
+    date DATE,
+    credentials_issued INTEGER,
+    unique_recipients INTEGER,
+    avg_processing_time INTERVAL,
+    top_credential_types JSONB
+);
+
+-- Distributed rollup table
+SELECT create_distributed_table('daily_analytics_rollups', 'institution_id');
+
+-- Automated rollup generation
+CREATE OR REPLACE FUNCTION generate_daily_rollups(target_date DATE)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO daily_analytics_rollups
+    SELECT 
+        institution_id,
+        target_date,
+        COUNT(*) as credentials_issued,
+        COUNT(DISTINCT recipient_id) as unique_recipients,
+        AVG(processing_time) as avg_processing_time,
+        jsonb_agg(credential_type) as top_credential_types
+    FROM analytics_events
+    WHERE DATE(issued_at) = target_date
+    GROUP BY institution_id;
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80" alt="Database Performance Metrics">
+
+            <h2>Query Performance Optimization</h2>
+
+            <p>The real magic happens in query optimization. Here's how we achieve sub-second performance:</p>
+
+            <h3>Parallel Query Execution</h3>
+
+            <pre><code class="language-sql">-- This query runs in parallel across all shards
+SELECT 
+    i.name as institution_name,
+    SUM(dar.credentials_issued) as total_credentials,
+    AVG(dar.avg_processing_time) as avg_processing_time
+FROM daily_analytics_rollups dar
+JOIN institutions i ON dar.institution_id = i.id
+WHERE dar.date >= '2024-01-01'
+GROUP BY i.name
+ORDER BY total_credentials DESC;
+</code></pre>
+
+            <h3>Smart Shard Pruning</h3>
+
+            <p>When queries include the distribution key (institution_id), Citus automatically prunes unnecessary shards:</p>
+
+            <pre><code class="language-ruby">class AnalyticsDashboard
+  def institution_metrics(institution_id, date_range)
+    # This query only hits the relevant shard
+    AnalyticsEvent.where(
+      institution_id: institution_id,
+      issued_at: date_range
+    ).group(:event_type)
+     .count
+  end
+
+  def global_metrics(date_range)
+    # This query runs across all shards in parallel
+    AnalyticsEvent.where(issued_at: date_range)
+                  .group(:institution_id)
+                  .sum(:credentials_issued)
+  end
+end</code></pre>
+
+            <h2>Real-world Performance Results</h2>
+
+            <p>After implementing this architecture, we achieved remarkable performance improvements:</p>
+
+            <ul>
+                <li><strong>Query Performance</strong>: Average query time reduced from 45 seconds to 0.8 seconds</li>
+                <li><strong>Throughput</strong>: Can now handle 50,000+ events per second</li>
+                <li><strong>Scalability</strong>: Linear scaling as we add more worker nodes</li>
+                <li><strong>Reliability</strong>: Built-in replication and failover capabilities</li>
+            </ul>
+
+            <h2>Lessons Learned</h2>
+
+            <h3>1. Choose Your Distribution Key Wisely</h3>
+
+            <p>The distribution key determines how your data is partitioned. We chose <code>institution_id</code> because most of our queries filter by institution, ensuring optimal shard pruning.</p>
+
+            <h3>2. Embrace Pre-aggregation</h3>
+
+            <p>Rollup tables are essential for complex analytics. Pre-computing aggregations during off-peak hours dramatically improves dashboard responsiveness.</p>
+
+            <h3>3. Monitor Shard Balance</h3>
+
+            <p>Regularly check shard distribution to ensure balanced load across worker nodes:</p>
+
+            <pre><code class="language-sql">-- Check shard distribution
+SELECT 
+    nodename,
+    COUNT(*) as shard_count,
+    SUM(shard_size) as total_size
+FROM citus_shards
+GROUP BY nodename;</code></pre>
+
+            <h2>Conclusion</h2>
+
+            <p>PostgreSQL Citus enabled us to build a robust, scalable analytics platform without the complexity of traditional big data solutions. By leveraging familiar SQL interfaces and PostgreSQL's reliability, we created a system that scales with our business while maintaining developer productivity.</p>
+
+            <p>The key to success was understanding our query patterns and designing the distribution strategy accordingly. With proper planning, Citus can transform your PostgreSQL database into a powerful distributed analytics engine.</p>
+
+            <blockquote>
+                "Sometimes the best solutions are the ones that extend what you already know rather than forcing you to learn entirely new paradigms."
+            </blockquote>
+
+            <p>If you're facing similar challenges with large-scale analytics, consider giving PostgreSQL Citus a try. It might be the missing piece in your architecture puzzle.</p>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Mahmoud Sayed. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
