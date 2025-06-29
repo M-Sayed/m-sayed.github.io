@@ -1,3 +1,24 @@
+// Calculate dynamic years of experience
+function updateYearsOfExperience() {
+    const startDate = new Date('2016-08-01'); // August 2016
+    const currentDate = new Date();
+
+    // Calculate the difference in milliseconds
+    const diffInMs = currentDate - startDate;
+
+    // Convert to years and round down
+    const yearsOfExperience = Math.floor(diffInMs / (365.25 * 24 * 60 * 60 * 1000));
+
+    // Update all elements with id="years-experience"
+    const yearsElements = document.querySelectorAll('#years-experience');
+    yearsElements.forEach(element => {
+        element.textContent = yearsOfExperience + '+';
+    });
+}
+
+// Update years when page loads
+document.addEventListener('DOMContentLoaded', updateYearsOfExperience);
+
 // Mobile menu functionality
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
@@ -19,7 +40,7 @@ navLinks.forEach(link => {
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        
+
         // Only prevent default for hash links (internal navigation)
         if (href.startsWith('#')) {
             e.preventDefault();

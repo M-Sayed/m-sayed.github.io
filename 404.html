@@ -1,6 +1,227 @@
-<script>
-  // redirect to home if the page is not found. :)
-  (function() {
-    window.location = '/';
-  })();
-</script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Mahmoud Sayed</title>
+    <link rel="icon" type="image/x-icon" href="/favicons.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .message {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .funny-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .redirect-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .countdown {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #feca57;
+            margin: 1rem 0;
+            text-shadow: 0 0 20px rgba(254, 202, 87, 0.5);
+        }
+
+        .redirect-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #feca57, #ff6b6b);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 5rem;
+            }
+
+            .message {
+                font-size: 1.5rem;
+            }
+
+            .countdown {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="error-code floating">404</div>
+        <div class="message">Oops! Page Not Found</div>
+        <div class="funny-text">
+            🕵️‍♂️ It looks like this page went on a coffee break and forgot to come back!<br>
+            Don't worry, even the best algorithms sometimes take a wrong turn.
+        </div>
+
+        <div class="redirect-info">
+            <div class="redirect-text">📍 Redirecting you to the homepage in:</div>
+            <div class="countdown" id="countdown">10</div>
+            <div class="redirect-text">🚀 Hang tight! Taking you back to safety...</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="progress"></div>
+            </div>
+        </div>
+
+        <div>
+            <a href="/" class="btn">🏠 Go Home Now</a>
+            <a href="/blog" class="btn">📝 Check Blog</a>
+        </div>
+    </div>
+
+    <script>
+            let countdown = 10;
+            const countdownElement = document.getElementById('countdown');
+            const progressElement = document.getElementById('progress');
+
+            // Update progress bar immediately
+            progressElement.style.width = '0%';
+
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+
+                // Update progress bar (100% - remaining percentage)
+                const progressPercent = ((10 - countdown) / 10) * 100;
+                progressElement.style.width = progressPercent + '%';
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '0';
+                    progressElement.style.width = '100%';
+
+                    // Add a small delay to show completion
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 500);
+                }
+            }, 1000);
+
+            // Add some fun interactions
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    clearInterval(timer);
+                    window.location.href = '/';
+                }
+            });
+        </script>
+</body>
+
+</html>
