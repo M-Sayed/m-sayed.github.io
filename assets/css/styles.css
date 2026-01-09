@@ -939,3 +939,341 @@ html {
 .blog-post-content li {
     margin-bottom: 0.5rem;
 }
+
+/* Print Styles for PDF Export */
+@media print {
+
+    /* Reset for print */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Page setup */
+    @page {
+        size: A4;
+        margin: 1.5cm 1.5cm 1.5cm 1.5cm;
+    }
+
+    body {
+        font-size: 11pt;
+        line-height: 1.4;
+        background: white !important;
+    }
+
+    /* Hide navigation and footer */
+    .navbar,
+    .hamburger,
+    .footer,
+    .social-links,
+    .hero-buttons,
+    #toptal-badge {
+        display: none !important;
+    }
+
+    /* Container adjustments */
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    /* Hero section */
+    .hero {
+        min-height: auto;
+        padding: 20pt 0 30pt 0;
+        page-break-after: avoid;
+        background: white !important;
+    }
+
+    .hero-title {
+        font-size: 28pt;
+        margin-bottom: 8pt;
+        color: #1f2937 !important;
+    }
+
+    .hero-subtitle {
+        font-size: 16pt;
+        color: #2563eb !important;
+        margin-bottom: 8pt;
+    }
+
+    .hero-description {
+        font-size: 11pt;
+        color: #6b7280 !important;
+    }
+
+    /* Section titles */
+    .section-title {
+        font-size: 18pt;
+        margin-bottom: 12pt;
+        color: #1f2937 !important;
+        page-break-after: avoid;
+        border-bottom: 2pt solid #2563eb;
+        padding-bottom: 6pt;
+    }
+
+    /* Sections */
+    section {
+        padding: 20pt 0 !important;
+        page-break-inside: avoid;
+    }
+
+    .about,
+    .experience,
+    .achievements,
+    .skills,
+    .projects,
+    .contact {
+        background: white !important;
+    }
+
+    /* About section */
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 15pt;
+    }
+
+    .about-text p {
+        font-size: 10pt;
+        margin-bottom: 10pt;
+        line-height: 1.5;
+    }
+
+    .about-highlights {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10pt;
+        margin-top: 15pt;
+    }
+
+    .highlight-card {
+        background: #f9fafb !important;
+        border: 1pt solid #e5e7eb !important;
+        page-break-inside: avoid;
+    }
+
+    /* Experience section */
+    .timeline::before {
+        background: #e5e7eb !important;
+    }
+
+    .timeline-item {
+        page-break-inside: avoid;
+        margin-bottom: 15pt;
+    }
+
+    .timeline-item::before {
+        background: #2563eb !important;
+        border-color: white !important;
+    }
+
+    .timeline-date {
+        font-size: 9pt;
+        color: #2563eb !important;
+        font-weight: 600;
+    }
+
+    .timeline-content h3 {
+        font-size: 13pt;
+        margin-bottom: 4pt;
+    }
+
+    .timeline-content h4 {
+        font-size: 11pt;
+        color: #6b7280 !important;
+        margin-bottom: 8pt;
+    }
+
+    .timeline-content ul {
+        margin-left: 15pt;
+    }
+
+    .timeline-content li {
+        font-size: 9pt;
+        line-height: 1.4;
+        margin-bottom: 4pt;
+    }
+
+    /* Achievements section */
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12pt;
+    }
+
+    .achievement-card {
+        background: #f9fafb !important;
+        border: 1pt solid #e5e7eb !important;
+        page-break-inside: avoid;
+        padding: 12pt;
+    }
+
+    .achievement-header {
+        margin-bottom: 8pt;
+    }
+
+    .achievement-icon {
+        font-size: 20pt;
+    }
+
+    .achievement-year {
+        font-size: 8pt;
+        background: rgba(37, 99, 235, 0.1) !important;
+        color: #2563eb !important;
+    }
+
+    .achievement-card h3 {
+        font-size: 12pt;
+        margin-bottom: 6pt;
+    }
+
+    .achievement-card p {
+        font-size: 9pt;
+        line-height: 1.4;
+    }
+
+    .achievement-link {
+        display: none;
+    }
+
+    /* Skills section */
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12pt;
+    }
+
+    .skill-category {
+        page-break-inside: avoid;
+        margin-bottom: 12pt;
+    }
+
+    .skill-category h3 {
+        font-size: 12pt;
+        margin-bottom: 8pt;
+        color: #1f2937 !important;
+    }
+
+    .skill-tags {
+        gap: 6pt;
+    }
+
+    .skill-tag {
+        font-size: 8pt;
+        background: rgba(37, 99, 235, 0.1) !important;
+        color: #2563eb !important;
+        padding: 3pt 8pt;
+        border: 1pt solid rgba(37, 99, 235, 0.2) !important;
+    }
+
+    /* Projects section */
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 12pt;
+    }
+
+    .project-card {
+        background: #f9fafb !important;
+        border: 1pt solid #e5e7eb !important;
+        page-break-inside: avoid;
+        padding: 12pt;
+    }
+
+    .project-card h3 {
+        font-size: 13pt;
+        margin-bottom: 8pt;
+    }
+
+    .project-card p {
+        font-size: 9pt;
+        line-height: 1.4;
+        margin-bottom: 10pt;
+    }
+
+    .project-tech span {
+        font-size: 8pt;
+        background: rgba(37, 99, 235, 0.1) !important;
+        color: #2563eb !important;
+        padding: 2pt 6pt;
+    }
+
+    /* Contact section */
+    .contact-content p {
+        font-size: 10pt;
+        margin-bottom: 12pt;
+    }
+
+    .contact-links {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8pt;
+    }
+
+    .contact-link {
+        font-size: 9pt;
+        padding: 8pt;
+        background: #f9fafb !important;
+        border: 1pt solid #e5e7eb !important;
+        page-break-inside: avoid;
+    }
+
+    .contact-link svg {
+        width: 14pt;
+        height: 14pt;
+    }
+
+    /* Remove hover effects */
+    *:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Page breaks */
+    .hero {
+        page-break-after: avoid;
+    }
+
+    .about {
+        page-break-after: auto;
+    }
+
+    .experience {
+        page-break-before: auto;
+        page-break-after: auto;
+    }
+
+    .achievements {
+        page-break-before: avoid;
+    }
+
+    /* Add contact info to top */
+    .hero::after {
+        content: "Email: mahmoudsayed0155@gmail.com | LinkedIn: linkedin.com/in/mahmoudsayed15 | GitHub: github.com/m-Sayed";
+        display: block;
+        font-size: 9pt;
+        color: #6b7280;
+        margin-top: 12pt;
+        padding-top: 12pt;
+        border-top: 1pt solid #e5e7eb;
+    }
+
+    /* Optimize space */
+    .timeline {
+        padding-left: 15pt;
+    }
+
+    .timeline::before {
+        left: 0;
+    }
+
+    .timeline-item::before {
+        left: 0;
+    }
+
+    .timeline-date {
+        padding-left: 20pt;
+    }
+
+    .timeline-content {
+        padding-left: 20pt;
+    }
+}
